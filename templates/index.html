@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}ISRM- Student Management System{% endblock %}
+{% block content %}
+
+<section class="hero-panel">
+    <div>
+        <p class="eyebrow">Student Management System</p>
+        <h1>Academic records, attendance context, and staff operations in one portal.</h1>
+        <p class="hero-copy">Our Student Management System gives faculty teams a focused workspace for reviewing learner records, marks, and account access.</p>
+        <div class="d-flex flex-wrap gap-2">
+            <a href="/login" class="btn btn-primary">Open Records</a>
+            <a href="/signup" class="btn btn-outline-secondary">Request Access</a>
+        </div>
+    </div>
+    <div class="hero-metrics">
+        <div>
+            <span class="metric-value">24/7</span>
+            <span class="metric-label">records access</span>
+        </div>
+        <div>
+            <span class="metric-value">3</span>
+            <span class="metric-label">staff roles</span>
+        </div>
+        <div>
+            <span class="metric-value">100%</span>
+            <span class="metric-label">academic focus</span>
+        </div>
+    </div>
+</section>
+
+<section class="feature-grid">
+    <article>
+        <h2>Student Records</h2>
+        <p>Review marks, learner names, and contact information through authenticated staff access.</p>
+    </article>
+    <article>
+        <h2>Administrative Actions</h2>
+        <p>Privileged users can maintain marks and remove outdated student records from the live roster.</p>
+    </article>
+    <article>
+        <h2>Audit Visibility</h2>
+        <p>Operational events are written for review during investigations and account support.</p>
+    </article>
+</section>
+
+{% endblock %}

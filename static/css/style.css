@@ -1,0 +1,358 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    background: #f4f7fb;
+    color: #1b2430;
+    font-family: Inter, "Segoe UI", Arial, sans-serif;
+}
+
+a {
+    text-decoration: none;
+}
+
+.app-nav {
+    background: #17324d;
+    border-bottom: 4px solid #2f8f83;
+}
+
+.app-nav .navbar-brand,
+.app-nav .nav-link {
+    color: #fff;
+}
+
+.app-nav .nav-link {
+    opacity: 0.84;
+}
+
+.app-nav .nav-link:hover {
+    opacity: 1;
+}
+
+.navbar-toggler {
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+.navbar-toggler-icon {
+    filter: invert(1);
+}
+
+.session-chip {
+    background: rgba(255, 255, 255, 0.14);
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    border-radius: 999px;
+    color: #fff;
+    font-size: 0.85rem;
+    padding: 0.35rem 0.75rem;
+}
+
+.page-shell {
+    width: min(1180px, calc(100% - 32px));
+    margin: 0 auto;
+    padding: 32px 0 56px;
+}
+
+.hero-panel,
+.dashboard-header,
+.demo-header {
+    display: grid;
+    grid-template-columns: minmax(0, 1.45fr) minmax(280px, 0.55fr);
+    gap: 28px;
+    align-items: center;
+    background: #ffffff;
+    border: 1px solid #dfe7ef;
+    border-radius: 8px;
+    padding: 34px;
+    box-shadow: 0 18px 42px rgba(22, 39, 61, 0.08);
+}
+
+.hero-panel h1,
+.auth-copy h1,
+.dashboard-header h1,
+.demo-header h1 {
+    margin: 0;
+    color: #172535;
+    font-size: clamp(2rem, 4vw, 3.6rem);
+    line-height: 1.04;
+    letter-spacing: 0;
+}
+
+.dashboard-header h1,
+.demo-header h1 {
+    font-size: clamp(1.9rem, 3vw, 2.8rem);
+}
+
+.hero-copy,
+.auth-copy p,
+.dashboard-header p,
+.demo-header p,
+.section-heading p,
+.feature-grid p,
+.attack-timeline p {
+    color: #5b6978;
+}
+
+.eyebrow {
+    color: #2f8f83;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0;
+    margin-bottom: 0.65rem;
+    text-transform: uppercase;
+}
+
+.hero-metrics,
+.status-stack,
+.demo-endpoints {
+    display: grid;
+    gap: 12px;
+}
+
+.hero-metrics > div,
+.stat-card,
+.credential-card {
+    background: #eef5f8;
+    border: 1px solid #d5e3eb;
+    border-radius: 8px;
+    padding: 18px;
+}
+
+.metric-value,
+.stat-number {
+    display: block;
+    color: #17324d;
+    font-size: 1.65rem;
+    font-weight: 800;
+}
+
+.metric-label,
+.stat-label {
+    color: #687788;
+    font-size: 0.88rem;
+}
+
+.feature-grid,
+.stat-row,
+.credential-grid,
+.talking-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+    margin-top: 18px;
+}
+
+.feature-grid article,
+.content-panel,
+.auth-card,
+.attack-timeline article {
+    background: #fff;
+    border: 1px solid #dfe7ef;
+    border-radius: 8px;
+    box-shadow: 0 12px 30px rgba(22, 39, 61, 0.06);
+}
+
+.feature-grid article {
+    padding: 22px;
+}
+
+.feature-grid h2,
+.content-panel h2,
+.attack-timeline h2 {
+    color: #172535;
+    font-size: 1.2rem;
+    margin: 0 0 8px;
+}
+
+.auth-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(320px, 440px);
+    gap: 32px;
+    align-items: center;
+    min-height: 68vh;
+}
+
+.auth-card {
+    padding: 28px;
+}
+
+.form-control {
+    border-color: #c9d5df;
+    border-radius: 6px;
+    min-height: 42px;
+}
+
+.form-footnote {
+    color: #687788;
+    font-size: 0.9rem;
+    margin: 16px 0 0;
+    text-align: center;
+}
+
+.dashboard-header,
+.demo-header,
+.content-panel,
+.attack-timeline {
+    margin-bottom: 18px;
+}
+
+.status-pill,
+.demo-endpoints span {
+    background: #e8f2ef;
+    border: 1px solid #c8ded8;
+    border-radius: 999px;
+    color: #1d665d;
+    font-weight: 700;
+    padding: 0.55rem 0.85rem;
+    text-align: center;
+}
+
+.role-pill {
+    background: #eef2fb;
+    border-color: #d6def0;
+    color: #314f86;
+    text-transform: capitalize;
+}
+
+.content-panel {
+    padding: 22px;
+}
+
+.section-heading {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 14px;
+}
+
+.records-table {
+    margin: 0;
+}
+
+.records-table thead th {
+    background: #eef5f8;
+    color: #425163;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+}
+
+.score-badge,
+.role-badge {
+    display: inline-flex;
+    min-width: 48px;
+    justify-content: center;
+    border-radius: 999px;
+    background: #edf7f2;
+    color: #1d665d;
+    font-weight: 700;
+    padding: 0.28rem 0.65rem;
+}
+
+.role-badge {
+    background: #eef2fb;
+    color: #314f86;
+}
+
+.action-row,
+.inline-form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+}
+
+.inline-form .form-control {
+    width: 92px;
+    min-height: 31px;
+}
+
+.attack-timeline {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+}
+
+.attack-timeline article {
+    padding: 22px;
+}
+
+.step-number {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    background: #17324d;
+    border-radius: 50%;
+    color: #fff;
+    font-weight: 800;
+    margin-bottom: 12px;
+}
+
+code {
+    display: inline-block;
+    max-width: 100%;
+    background: #f0f4f7;
+    border: 1px solid #d8e2ea;
+    border-radius: 6px;
+    color: #23445f;
+    padding: 0.18rem 0.38rem;
+    white-space: normal;
+    word-break: break-word;
+}
+
+.credential-card span {
+    color: #687788;
+    display: block;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+}
+
+.credential-card strong,
+.credential-card code {
+    display: block;
+    margin-top: 6px;
+}
+
+.talking-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.talking-grid p {
+    background: #f7fafc;
+    border: 1px solid #dfe7ef;
+    border-radius: 8px;
+    margin: 0;
+    padding: 14px;
+}
+
+@media (max-width: 800px) {
+    .hero-panel,
+    .dashboard-header,
+    .demo-header,
+    .auth-layout,
+    .attack-timeline,
+    .feature-grid,
+    .stat-row,
+    .credential-grid,
+    .talking-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .page-shell {
+        width: min(100% - 20px, 1180px);
+        padding-top: 18px;
+    }
+
+    .hero-panel,
+    .dashboard-header,
+    .demo-header,
+    .content-panel,
+    .auth-card,
+    .attack-timeline article {
+        padding: 18px;
+    }
+}

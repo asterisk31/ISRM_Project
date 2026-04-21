@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+{% block title %}Attack Chain Demo | ISRM Student Management System{% endblock %}
+{% block content %}
+
+<section class="demo-header">
+    <div>
+        <p class="eyebrow">Presenter Console</p>
+        <h1>Multi-stage attack chain walkthrough</h1>
+        <p>This hidden page maps each client-facing stage to the vulnerable app behavior and the evidence to show during the demo.</p>
+    </div>
+    <div class="demo-endpoints">
+        <span>/demo/session</span>
+        <span>/demo/recent-logs</span>
+        <span>/demo/exfiltrated</span>
+    </div>
+</section>
+
+<section class="content-panel">
+    <div class="section-heading">
+        <div>
+            <h2>Known Demo Accounts</h2>
+            <p>Use these to keep the walkthrough repeatable after loading the seed data.</p>
+        </div>
+    </div>
+    <div class="credential-grid">
+        {% for item in credentials %}
+            <div class="credential-card">
+                <span>{{ item.role }}</span>
+                <strong>{{ item.username }}</strong>
+                <code>{{ item.password }}</code>
+            </div>
+        {% endfor %}
+    </div>
+</section>
+
+<section class="attack-timeline">
+    <article>
+        <span class="step-number">01</span>
+        <h2>Brute-force initial access</h2>
+        <p>Try a small password list against `/login` until weak credentials succeed. Explain this as password guessing against accounts without lockout or rate limiting.</p>
+        <code>python attack_demo_scripts/full_attack_chain.py --skip-destructive</code>
+    </article>
+    <article>
+        <span class="step-number">02</span>
+        <h2>Authenticated SQL injection</h2>
+        <p>Use the session cookie to query student data with unsanitized input concatenated into SQL.</p>
+        <code>GET /api/student?id={{ payloads.sqli }}</code>
+    </article>
+    <article>
+        <span class="step-number">03</span>
+        <h2>Session hijacking</h2>
+        <p>Show the `session` cookie and `/demo/session` response. The key message is that stolen session material lets an attacker impersonate a valid user.</p>
+        <code>GET /demo/session</code>
+    </article>
+    <article>
+        <span class="step-number">04</span>
+        <h2>Broken access control</h2>
+        <p>POST a role change for a normal account. The endpoint updates roles without proving the caller is an administrator.</p>
+        <code>POST /api/change_role username={{ payloads.role.username }} role={{ payloads.role.role }}</code>
+    </article>
+    <article>
+        <span class="step-number">05</span>
+        <h2>Log injection</h2>
+        <p>Submit a crafted username containing escaped line breaks so forged events appear in `app.log`.</p>
+        <code>{{ payloads.log }}</code>
+    </article>
+    <article>
+        <span class="step-number">06</span>
+        <h2>Collection and exfiltration</h2>
+        <p>Collect student records through SQL injection, then send the result to a local demo receiver to simulate outbound data theft.</p>
+        <code>POST /demo/exfiltrate</code>
+    </article>
+    <article>
+        <span class="step-number">07</span>
+        <h2>Integrity impact</h2>
+        <p>After escalation, update or delete records to show business disruption from unauthorized administrative actions.</p>
+        <code>POST /api/update_marks</code>
+    </article>
+</section>
+
+<section class="content-panel">
+    <div class="section-heading">
+        <div>
+            <h2>Client Talking Points</h2>
+            <p>Use concise definitions while showing live evidence.</p>
+        </div>
+    </div>
+    <div class="talking-grid">
+        <p><strong>Brute force:</strong> automated password guessing until a weak credential works.</p>
+        <p><strong>SQL injection:</strong> attacker input changes the database query the app intended to run.</p>
+        <p><strong>Session hijacking:</strong> stolen cookies are reused to impersonate a signed-in user.</p>
+        <p><strong>Privilege escalation:</strong> a normal user gains administrative capability.</p>
+        <p><strong>Log injection:</strong> forged log lines hide or confuse attacker activity.</p>
+        <p><strong>Exfiltration:</strong> sensitive records are copied out of the application boundary.</p>
+    </div>
+</section>
+
+{% endblock %}

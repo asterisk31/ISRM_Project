@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}Create Account | ISRM Student Management System{% endblock %}
+{% block content %}
+
+<section class="auth-layout">
+    <div class="auth-copy">
+        <p class="eyebrow">Access Request</p>
+        <h1>Create a staff portal account.</h1>
+        <p>New accounts are provisioned with standard user access for student record review.</p>
+    </div>
+    <form method="POST" class="auth-card">
+        <label class="form-label">Username</label>
+        <input name="username" class="form-control" placeholder="Choose a username" required>
+
+        <label class="form-label mt-3">Password</label>
+        <input name="password" type="password" class="form-control" placeholder="Choose a password" required>
+
+        <button class="btn btn-success w-100 mt-4">Create Account</button>
+        <p class="form-footnote">Already registered? <a href="/login">Return to login</a>.</p>
+    </form>
+</section>
+
+{% endblock %}

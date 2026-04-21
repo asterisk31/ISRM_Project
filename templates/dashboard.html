@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+{% block title %}Records Dashboard | ISRM Student Management System{% endblock %}
+{% block content %}
+
+<section class="dashboard-header">
+    <div>
+        <p class="eyebrow">Records Dashboard</p>
+        <h1>Student performance workspace</h1>
+        <p>Signed in as {{ session.get('user') }} with {{ role }} access.</p>
+    </div>
+    <div class="status-stack">
+        <span class="status-pill">Active session</span>
+        <span class="status-pill role-pill">{{ role }}</span>
+    </div>
+</section>
+
+<section class="stat-row">
+    <div class="stat-card">
+        <span class="stat-number">{{ data|length }}</span>
+        <span class="stat-label">Student records</span>
+    </div>
+    <div class="stat-card">
+        <span class="stat-number">{{ role|capitalize }}</span>
+        <span class="stat-label">Current role</span>
+    </div>
+    <div class="stat-card">
+        <span class="stat-number">{% if admin_data %}{{ admin_data|length }}{% else %}Limited{% endif %}</span>
+        <span class="stat-label">Account visibility</span>
+    </div>
+</section>
+
+<section class="content-panel">
+    <div class="section-heading">
+        <div>
+            <h2>Student Records</h2>
+            <p>Current academic roster and marks.</p>
+        </div>
+    </div>
+    <div class="table-responsive">
+        <table class="table align-middle records-table">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Marks</th>
+                {% if role == 'admin' %}
+                    <th>Admin Actions</th>
+                {% endif %}
+            </tr>
+            </thead>
+            <tbody>
+            {% for s in data %}
+                <tr>
+                    <td>{{ s.id }}</td>
+                    <td>{{ s.name }}</td>
+                    <td><span class="score-badge">{{ s.marks }}</span></td>
+                    {% if role == 'admin' %}
+                        <td>
+                            <div class="action-row">
+                                <form action="/api/update_marks" method="POST" class="inline-form">
+                                    <input type="hidden" name="id" value="{{ s.id }}">
+                                    <input type="number" name="marks" class="form-control form-control-sm" placeholder="Marks">
+                                    <button class="btn btn-sm btn-warning">Update</button>
+                                </form>
+                                <form action="/api/delete_student" method="POST">
+                                    <input type="hidden" name="id" value="{{ s.id }}">
+                                    <button class="btn btn-sm btn-danger">Delete</button>
+                                </form>
+                            </div>
+                        </td>
+                    {% endif %}
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+
+{% if role == 'admin' %}
+<section class="content-panel">
+    <div class="section-heading">
+        <div>
+            <h2>Account Administration</h2>
+            <p>Staff account inventory and role assignments.</p>
+        </div>
+    </div>
+    <div class="table-responsive">
+        <table class="table align-middle records-table">
+            <thead>
+            <tr>
+                <th>Username</th>
+                <th>Password</th>
+                <th>Role</th>
+                <th>Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for u in admin_data %}
+                <tr>
+                    <td>{{ u.username }}</td>
+                    <td>{{ u.password }}</td>
+                    <td><span class="role-badge">{{ u.role }}</span></td>
+                    <td><a href="/delete_user?id={{ u.id }}" class="btn btn-danger btn-sm">Delete</a></td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+{% endif %}
+
+{% endblock %}

@@ -93,6 +93,19 @@ jobs:
           fail_action: false
           allow_issue_writing: false
 
+      - name: Rename ZAP Reports (Remove Underscores)
+        run: |
+          ls -la *.html *.json 2>/dev/null || true
+          # Rename files with underscores to use hyphens
+          for file in *_*.html *_*.json; do
+            if [ -f "$file" ]; then
+              newfile=$(echo "$file" | tr '_' '-')
+              mv "$file" "$newfile"
+              echo "Renamed $file to $newfile"
+            fi
+          done
+          ls -la *.html *.json 2>/dev/null || true
+
       - name: Upload ZAP Report
         uses: actions/upload-artifact@v4
         with:

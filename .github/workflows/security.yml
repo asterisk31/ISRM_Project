@@ -98,5 +98,5 @@ jobs:
         with:
           name: zap-report
           path: |
-            report_html.html
-            report_json.json
+            report-html.html
+            report-json.json

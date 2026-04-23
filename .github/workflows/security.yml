@@ -57,7 +57,19 @@ jobs:
         run: |
           export FLASK_APP=app.py
           nohup python app.py > app.log 2>&1 &
-          sleep 10
+          sleep 15
+          # Verify Flask is running
+          for i in {1..30}; do
+            if curl -f http://127.0.0.1:5000/ > /dev/null 2>&1; then
+              echo "Flask app is running"
+              exit 0
+            fi
+            echo "Waiting for Flask app to start... ($i/30)"
+            sleep 1
+          done
+          echo "Flask app failed to start"
+          cat app.log
+          exit 1
 
       - name: Run ZAP Full Scan
         uses: zaproxy/action-full-scan@v0.10.0

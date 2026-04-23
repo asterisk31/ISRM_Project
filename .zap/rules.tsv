@@ -1,0 +1,3 @@
+10021	WARN	Incomplete or No Cache-control Header
+10020	WARN	X-Frame-Options Header Not Set
+10016	WARN	Web Browser XSS Protection Not Enabled

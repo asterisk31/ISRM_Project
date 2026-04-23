@@ -53,6 +53,19 @@ jobs:
           pip install -r requirements.txt || true
           pip install flask mysql-connector-python
 
+      - name: Create Mock Config
+        run: |
+          cat > config.py << 'EOF'
+          # Mock config for CI/CD testing
+          DB_CONFIG = {
+              "host": "localhost",
+              "user": "root",
+              "password": "",
+              "database": "isrm_test",
+              "raise_on_warnings": False,
+          }
+          EOF
+
       - name: Start Flask App
         run: |
           export FLASK_APP=app.py

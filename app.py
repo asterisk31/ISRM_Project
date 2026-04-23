@@ -17,4 +17,7 @@ app.register_blueprint(admin_bp)
 app.register_blueprint(demo_bp)
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    # Bind to all interfaces and disable debug mode in CI/CD environments
+    import os
+    debug_mode = os.getenv("FLASK_DEBUG", "False").lower() == "true"
+    app.run(host="0.0.0.0", port=5000, debug=debug_mode, use_reloader=False)

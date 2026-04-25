@@ -66,6 +66,7 @@ jobs:
               "raise_on_warnings": False,
           }
           SECRET_KEY = os.getenv("SECRET_KEY", "test-secret-key-ci-only")
+          SESSION_COOKIE_SECURE = False  # Use False in CI/CD (no HTTPS)
           EOF
 
       - name: Start Flask App
@@ -94,7 +95,7 @@ jobs:
           cmd_options: "-a -j -m 5"
           fail_action: false
           allow_issue_writing: false
-          artifact_name: "zap-scan"
+          artifact_name: "zapscan"
 
       - name: Upload ZAP Report
         uses: actions/upload-artifact@v4

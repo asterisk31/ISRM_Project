@@ -1,5 +1,6 @@
 import os
 import re
+import secrets
 import time
 from functools import wraps
 
@@ -97,11 +98,54 @@ def reset_failed_logins(remote_addr, username):
     _failed_login_tracker.pop(_tracker_key(remote_addr, username), None)
 
 
+def generate_session_token():
+    return secrets.token_urlsafe(32)
+
+
+def establish_session(user, session_token):
+    session.clear()
+    session.permanent = True
+    session["user_id"] = user["id"]
+    session["user"] = user["username"]
+    session["role"] = user["role"]
+    session["session_token"] = session_token
+
+
+def is_active_session(conn):
+    user_id = session.get("user_id")
+    session_token = session.get("session_token")
+    if not user_id or not session_token:
+        return False
+
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute(
+        "SELECT id, username, role, session_token FROM users WHERE id = %s",
+        (user_id,),
+    )
+    user = cursor.fetchone()
+    cursor.close()
+
+    if not user or user.get("session_token") != session_token:
+        return False
+
+    session["user"] = user["username"]
+    session["role"] = user["role"]
+    return True
+
+
 def login_required(view):
     @wraps(view)
     def wrapped(*args, **kwargs):
         if "user_id" not in session:
             flash("Please log in to continue.", "warning")
+            return redirect(url_for("auth.login"))
+        from db.db import get_db
+        conn = get_db()
+        valid = is_active_session(conn)
+        conn.close()
+        if not valid:
+            session.clear()
+            flash("Your session has expired. Please sign in again.", "warning")
             return redirect(url_for("auth.login"))
         return view(*args, **kwargs)
 
@@ -114,6 +158,14 @@ def admin_required(view):
         if "user_id" not in session:
             flash("Please log in to continue.", "warning")
             return redirect(url_for("auth.login"))
+        from db.db import get_db
+        conn = get_db()
+        valid = is_active_session(conn)
+        conn.close()
+        if not valid:
+            session.clear()
+            flash("Your session has expired. Please sign in again.", "warning")
+            return redirect(url_for("auth.login"))
         if session.get("role") != "admin":
             flash("Administrator access is required.", "danger")
             return redirect(url_for("dashboard.dashboard"))
@@ -125,6 +177,13 @@ def admin_required(view):
 def api_login_required():
     if "user_id" not in session:
         return jsonify({"error": "Authentication required."}), 401
+    from db.db import get_db
+    conn = get_db()
+    valid = is_active_session(conn)
+    conn.close()
+    if not valid:
+        session.clear()
+        return jsonify({"error": "Session expired. Please log in again."}), 401
     return None
 
 

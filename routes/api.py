@@ -4,6 +4,8 @@ from db.db import get_db
 from utils.auth_utils import (
     api_admin_required,
     api_login_required,
+    establish_session,
+    generate_session_token,
     parse_marks,
     parse_positive_int,
     validate_role,
@@ -85,7 +87,22 @@ def change_role():
         return _error_response("User not found.", 404)
 
     if username == session.get("user"):
-        session["role"] = new_role
+        session_token = generate_session_token()
+        conn = get_db()
+        cursor = conn.cursor(dictionary=True)
+        cursor.execute(
+            "UPDATE users SET session_token = %s WHERE id = %s",
+            (session_token, session.get("user_id")),
+        )
+        conn.commit()
+        cursor.execute(
+            "SELECT id, username, role FROM users WHERE id = %s",
+            (session.get("user_id"),),
+        )
+        current_user = cursor.fetchone()
+        cursor.close()
+        conn.close()
+        establish_session(current_user, session_token)
 
     log_event("ROLE UPDATED", session.get("user"), f"target={username} role={new_role}")
     return _success_response("Role updated")

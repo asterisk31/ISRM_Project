@@ -3,6 +3,8 @@ from werkzeug.security import check_password_hash, generate_password_hash
 
 from db.db import get_db
 from utils.auth_utils import (
+    establish_session,
+    generate_session_token,
     is_login_blocked,
     record_failed_login,
     reset_failed_logins,
@@ -51,11 +53,17 @@ def login():
 
         if user and check_password_hash(user["password"], password):
             reset_failed_logins(remote_addr, username)
-            session.clear()
-            session.permanent = True
-            session["user_id"] = user["id"]
-            session["user"] = user["username"]
-            session["role"] = user["role"]
+            session_token = generate_session_token()
+            conn = get_db()
+            cursor = conn.cursor()
+            cursor.execute(
+                "UPDATE users SET session_token = %s WHERE id = %s",
+                (session_token, user["id"]),
+            )
+            conn.commit()
+            cursor.close()
+            conn.close()
+            establish_session(user, session_token)
             log_event("LOGIN SUCCESS", username, f"ip={remote_addr}")
             return redirect(url_for("dashboard.dashboard"))
 
@@ -108,6 +116,14 @@ def signup():
 @auth_bp.route("/logout")
 def logout():
     username = session.get("user")
+    user_id = session.get("user_id")
+    if user_id:
+        conn = get_db()
+        cursor = conn.cursor()
+        cursor.execute("UPDATE users SET session_token = NULL WHERE id = %s", (user_id,))
+        conn.commit()
+        cursor.close()
+        conn.close()
     session.clear()
     if username:
         log_event("LOGOUT", username)

@@ -64,6 +64,7 @@ jobs:
               "database": "isrm_test",
               "raise_on_warnings": False,
           }
+          SECRET_KEY = os.getenv("SECRET_KEY", "test-secret-key-ci-only")
           EOF
 
       - name: Start Flask App

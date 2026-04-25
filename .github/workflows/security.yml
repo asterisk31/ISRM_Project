@@ -57,6 +57,7 @@ jobs:
         run: |
           cat > config.py << 'EOF'
           # Mock config for CI/CD testing
+          import os
           DB_CONFIG = {
               "host": "localhost",
               "user": "root",

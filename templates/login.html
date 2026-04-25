@@ -10,10 +10,10 @@
     </div>
     <form method="POST" class="auth-card">
         <label class="form-label">Username</label>
-        <input name="username" class="form-control" placeholder="Username" autocomplete="username" required>
+        <input name="username" class="form-control" placeholder="Username" autocomplete="username" minlength="3" maxlength="30" pattern="[A-Za-z0-9_.-]+" required>
 
         <label class="form-label mt-3">Password</label>
-        <input name="password" type="password" class="form-control" placeholder="Password" autocomplete="current-password" required>
+        <input name="password" type="password" class="form-control" placeholder="Password" autocomplete="current-password" minlength="8" maxlength="64" required>
 
         <button class="btn btn-primary w-100 mt-4">Login</button>
         <p class="form-footnote">Need access? <a href="/signup">Create a staff account</a>.</p>

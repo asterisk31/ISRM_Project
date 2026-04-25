@@ -55,6 +55,10 @@ a {
     padding: 32px 0 56px;
 }
 
+.flash-stack {
+    margin-bottom: 18px;
+}
+
 .hero-panel,
 .dashboard-header,
 .demo-header {

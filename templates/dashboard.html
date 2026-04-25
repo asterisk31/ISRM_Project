@@ -89,7 +89,6 @@
             <thead>
             <tr>
                 <th>Username</th>
-                <th>Password</th>
                 <th>Role</th>
                 <th>Action</th>
             </tr>
@@ -98,9 +97,13 @@
             {% for u in admin_data %}
                 <tr>
                     <td>{{ u.username }}</td>
-                    <td>{{ u.password }}</td>
                     <td><span class="role-badge">{{ u.role }}</span></td>
-                    <td><a href="/delete_user?id={{ u.id }}" class="btn btn-danger btn-sm">Delete</a></td>
+                    <td>
+                        <form action="/delete_user" method="POST" onsubmit="return confirm('Delete this user account?');">
+                            <input type="hidden" name="id" value="{{ u.id }}">
+                            <button class="btn btn-danger btn-sm">Delete</button>
+                        </form>
+                    </td>
                 </tr>
             {% endfor %}
             </tbody>
